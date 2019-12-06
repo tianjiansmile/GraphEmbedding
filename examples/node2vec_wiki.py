@@ -11,7 +11,9 @@ from sklearn.manifold import TSNE
 
 
 def evaluate_embeddings(embeddings):
-    X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+    # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+
+    X, Y = read_node_label('../data/my/45456803_label.txt')
     tr_frac = 0.8
     print("Training classifier using {:.2f}% nodes...".format(
         tr_frac * 100))
@@ -20,7 +22,9 @@ def evaluate_embeddings(embeddings):
 
 
 def plot_embeddings(embeddings,):
-    X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+    # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+
+    X, Y = read_node_label('../data/my/45456803_label.txt')
 
     emb_list = []
     for k in X:
@@ -36,19 +40,21 @@ def plot_embeddings(embeddings,):
         color_idx[Y[i][0]].append(i)
 
     for c, idx in color_idx.items():
-        plt.scatter(node_pos[idx, 0], node_pos[idx, 1], label=c))
+        plt.scatter(node_pos[idx, 0], node_pos[idx, 1], label=c)
+
     plt.legend()
     plt.show()
 
 
 if __name__ == "__main__":
-    G=nx.read_edgelist('../data/wiki/Wiki_edgelist.txt',
-                         create_using = nx.DiGraph(), nodetype = None, data = [('weight', int)])
+    # G=nx.read_edgelist('../data/wiki/Wiki_edgelist.txt',create_using = nx.DiGraph(), nodetype = None, data = [('weight', int)])
 
-    model=Node2Vec(G, walk_length = 10, num_walks = 80,
-                   p = 0.25, q = 4, workers = 1)
+    G = nx.read_edgelist('../data/my/45456803edgelist.txt', create_using=nx.Graph(), nodetype=None,
+                         data=[('type', str)])
+
+    model=Node2Vec(G, walk_length = 60, num_walks = 80,p = 0.25, q = 4, workers = 1)
     model.train(window_size = 5, iter = 3)
     embeddings=model.get_embeddings()
 
     evaluate_embeddings(embeddings)
-    plot_embeddings(embeddings)
+    # plot_embeddings(embeddings)

@@ -11,7 +11,9 @@ from sklearn.manifold import TSNE
 
 
 def evaluate_embeddings(embeddings):
-    X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+    # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+
+    X, Y = read_node_label('../data/my/45456803_label.txt')
     tr_frac = 0.8
     print("Training classifier using {:.2f}% nodes...".format(
         tr_frac * 100))
@@ -20,7 +22,9 @@ def evaluate_embeddings(embeddings):
 
 
 def plot_embeddings(embeddings,):
-    X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+    # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+
+    X, Y = read_node_label('../data/my/45456803_label.txt')
 
     emb_list = []
     for k in X:
@@ -43,8 +47,11 @@ def plot_embeddings(embeddings,):
 
 
 if __name__ == "__main__":
-    G = nx.read_edgelist('../data/wiki/Wiki_edgelist.txt',
-                         create_using=nx.DiGraph(), nodetype=None, data=[('weight', int)])
+    # G = nx.read_edgelist('../data/wiki/Wiki_edgelist.txt',
+    #                      create_using=nx.DiGraph(), nodetype=None, data=[('weight', int)])
+
+    G = nx.read_edgelist('../data/my/45456803edgelist.txt',
+                         create_using=nx.DiGraph(), nodetype=None, data=[('type', str)])
 
     model = SDNE(G, hidden_size=[256, 128],)
     model.train(batch_size=3000, epochs=40, verbose=2)

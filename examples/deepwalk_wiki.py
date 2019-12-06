@@ -11,7 +11,9 @@ from sklearn.manifold import TSNE
 
 
 def evaluate_embeddings(embeddings):
-    X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+    # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+    X, Y = read_node_label('../data/my/45456803_label.txt')
+
     tr_frac = 0.8
     print("Training classifier using {:.2f}% nodes...".format(
         tr_frac * 100))
@@ -20,7 +22,9 @@ def evaluate_embeddings(embeddings):
 
 
 def plot_embeddings(embeddings,):
-    X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+    # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+
+    X, Y = read_node_label('../data/my/45456803_label.txt')
 
     emb_list = []
     for k in X:
@@ -42,12 +46,17 @@ def plot_embeddings(embeddings,):
 
 
 if __name__ == "__main__":
-    G = nx.read_edgelist('../data/wiki/Wiki_edgelist.txt',
-                         create_using=nx.DiGraph(), nodetype=None, data=[('weight', int)])
+    # G = nx.read_edgelist('../data/wiki/Wiki_edgelist.txt',
+    #                      create_using=nx.DiGraph(), nodetype=None, data=[('weight', int)])
 
-    model = DeepWalk(G, walk_length=10, num_walks=80, workers=1)
+    G = nx.read_edgelist('../data/my/45456803edgelist.txt',
+                         create_using=nx.DiGraph(), nodetype=None, data=[('type', str)])
+
+    # G = nx.karate_club_graph()
+
+    model = DeepWalk(G, walk_length=40, num_walks=80, workers=1)
     model.train(window_size=5, iter=3)
     embeddings = model.get_embeddings()
 
     evaluate_embeddings(embeddings)
-    plot_embeddings(embeddings)
+    # plot_embeddings(embeddings)
