@@ -51,10 +51,11 @@ if __name__ == "__main__":
     #                      create_using=nx.DiGraph(), nodetype=None, data=[('weight', int)])
 
     G = nx.read_edgelist('../data/my/45456803edgelist.txt',
-                         create_using=nx.DiGraph(), nodetype=None, data=[('type', str)])
+                         create_using=nx.DiGraph(), nodetype=None,
+                         data=[('type', str)])
 
     model = LINE(G, embedding_size=128, order='second')
-    model.train(batch_size=1024, epochs=50, verbose=2)
+    model.train(batch_size=1024, epochs=150, verbose=2)
     embeddings = model.get_embeddings()
 
     evaluate_embeddings(embeddings)
