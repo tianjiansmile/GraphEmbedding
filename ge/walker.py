@@ -47,15 +47,18 @@ class RandomWalker:
             cur = walk[-1]
             cur_nbrs = list(G.neighbors(cur))
             if len(cur_nbrs) > 0:
-                if len(walk) == 1:
-                    walk.append(
-                        cur_nbrs[alias_sample(alias_nodes[cur][0], alias_nodes[cur][1])])
-                else:
-                    prev = walk[-2]
-                    edge = (prev, cur)
-                    next_node = cur_nbrs[alias_sample(alias_edges[edge][0],
-                                                      alias_edges[edge][1])]
-                    walk.append(next_node)
+                try:
+                    if len(walk) == 1:
+                        walk.append(
+                            cur_nbrs[alias_sample(alias_nodes[cur][0], alias_nodes[cur][1])])
+                    else:
+                        prev = walk[-2]
+                        edge = (prev, cur)
+                        next_node = cur_nbrs[alias_sample(alias_edges[edge][0],
+                                                          alias_edges[edge][1])]
+                        walk.append(next_node)
+                except Exception as e:
+                    print('alias_walk',edge,e)
             else:
                 break
 

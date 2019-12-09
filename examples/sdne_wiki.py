@@ -59,5 +59,5 @@ if __name__ == "__main__":
     model.train(batch_size=3000, epochs=50, verbose=2)
     embeddings = model.get_embeddings()
 
-    # evaluate_embeddings(embeddings,comm)
+    evaluate_embeddings(embeddings,comm)
     plot_embeddings(embeddings,comm)

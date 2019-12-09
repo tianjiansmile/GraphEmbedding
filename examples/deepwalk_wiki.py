@@ -10,9 +10,9 @@ import networkx as nx
 from sklearn.manifold import TSNE
 
 
-def evaluate_embeddings(embeddings):
+def evaluate_embeddings(embeddings,comm):
     # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
-    X, Y = read_node_label('../data/my/27517642_label.txt')
+    X, Y = read_node_label('../data/my/'+comm+'_label.txt')
 
     tr_frac = 0.8
     print("Training classifier using {:.2f}% nodes...".format(
@@ -24,7 +24,7 @@ def evaluate_embeddings(embeddings):
 def plot_embeddings(embeddings,):
     # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
 
-    X, Y = read_node_label('../data/my/27517642_label.txt')
+    X, Y = read_node_label('../data/my/'+comm+'_label.txt')
 
     emb_list = []
     for k in X:
@@ -49,8 +49,10 @@ if __name__ == "__main__":
     # G = nx.read_edgelist('../data/wiki/Wiki_edgelist.txt',
     #                      create_using=nx.DiGraph(), nodetype=None, data=[('weight', int)])
 
-    G = nx.read_edgelist('../data/my/27517642edgelist.txt',
-                         create_using=nx.Graph(), nodetype=None, data=[('type', str)])
+    comm = '3229132'
+    G = nx.read_edgelist('../data/my/'+comm+'edgelist.txt',
+                         create_using=nx.Graph(), nodetype=None,
+                         data=[('type', str),('call_times', str),('call_len', str)])
 
     # G = nx.karate_club_graph()
 
@@ -58,5 +60,5 @@ if __name__ == "__main__":
     model.train(window_size=5, iter=3)
     embeddings = model.get_embeddings()
 
-    evaluate_embeddings(embeddings)
+    # evaluate_embeddings(embeddings,comm)
     plot_embeddings(embeddings)
