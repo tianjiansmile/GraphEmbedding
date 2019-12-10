@@ -106,7 +106,7 @@ class Struc2Vec():
         pd.to_pickle(average_weight, self.temp_path + 'average_weight')
         pd.to_pickle(gamma, self.temp_path + 'gamma.pkl')
 
-    def train(self, embed_size=128, window_size=5, workers=3, iter=5):
+    def train(self, embed_size=3, window_size=5, workers=3, iter=5):
 
         # pd.read_pickle(self.temp_path+'walks.pkl')
         sentences = self.sentences
