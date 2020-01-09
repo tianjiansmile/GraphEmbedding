@@ -22,14 +22,18 @@ class RandomWalker:
         self.p = p
         self.q = q
 
+    # 具体的随机游走过程
     def deepwalk_walk(self, walk_length, start_node):
 
         walk = [start_node]
 
+        # 只要没达到步长，就继续行走
         while len(walk) < walk_length:
             cur = walk[-1]
+            # 获取当前节点邻居节点
             cur_nbrs = list(self.G.neighbors(cur))
             if len(cur_nbrs) > 0:
+                # 从邻居节点中随机选择
                 walk.append(random.choice(cur_nbrs))
             else:
                 break
@@ -64,6 +68,7 @@ class RandomWalker:
 
         return walk
 
+
     def simulate_walks(self, num_walks, walk_length, workers=1, verbose=0):
 
         G = self.G
@@ -78,11 +83,15 @@ class RandomWalker:
 
         return walks
 
+    # 模拟随机游走
     def _simulate_walks(self, nodes, num_walks, walk_length,):
         walks = []
         for _ in range(num_walks):
+            # 节点重洗
             random.shuffle(nodes)
+            # 对每一个节点都进行随机游走，从当前节点开始
             for v in nodes:
+                # 如果返回概率和离开概率都为1，则进行正常的随机游走
                 if self.p == 1 and self.q == 1:
                     walks.append(self.deepwalk_walk(
                         walk_length=walk_length, start_node=v))

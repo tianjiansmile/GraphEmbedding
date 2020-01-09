@@ -79,6 +79,7 @@ class LINE:
             raise ValueError('mode must be fisrt,second,or all')
 
         self.graph = graph
+        # idx2node 节点列表，node2idx 节点：下标
         self.idx2node, self.node2idx = preprocess_nxgraph(graph)
         self.use_alias = True
 
@@ -86,11 +87,13 @@ class LINE:
         self.order = order
 
         self._embeddings = {}
+        # 负采样率
         self.negative_ratio = negative_ratio
         self.order = order
 
         self.node_size = graph.number_of_nodes()
         self.edge_size = graph.number_of_edges()
+        # 每一轮迭代的样本数=边数*6
         self.samples_per_epoch = self.edge_size*(1+negative_ratio)
 
         self._gen_sampling_table()
@@ -108,26 +111,35 @@ class LINE:
         self.model.compile(opt, line_loss)
         self.batch_it = self.batch_iter(self.node2idx)
 
+    # 图的边权经验分布函数
     def _gen_sampling_table(self):
 
         # create sampling table for vertex
+        # power = 0.75 采用负采样优化技巧
         power = 0.75
         numNodes = self.node_size
+
         node_degree = np.zeros(numNodes)  # out degree
         node2idx = self.node2idx
 
+        # 统计每一个节点的出度，如果有权图，获取出度的权值和
         for edge in self.graph.edges():
             node_degree[node2idx[edge[0]]
                         ] += self.graph[edge[0]][edge[1]].get('weight', 1.0)
 
+        # 对每个节点出度做运算，x * 0.75次方，并求总和
         total_sum = sum([math.pow(node_degree[i], power)
                          for i in range(numNodes)])
+
+        # 二阶经验分布函数 wij / sum(w)  wij 某一条边权，  sum(w) 全部边权之和
+        # 相当于说给出来每个顶点出度在总出度和中的一个占比的分布结果，节点的向量内积要去拟合这个分布结果
         norm_prob = [float(math.pow(node_degree[j], power)) /
                      total_sum for j in range(numNodes)]
 
         self.node_accept, self.node_alias = create_alias_table(norm_prob)
 
         # create sampling table for edge
+        # 一阶相似度  描述为若 u,v 之间存在直连边，则边权 Wuv 即为两个顶点的相似度，若存在直连边，则1阶否则相似度为0
         numEdges = self.graph.number_of_edges()
         total_sum = sum([self.graph[edge[0]][edge[1]].get('weight', 1.0)
                          for edge in self.graph.edges()])

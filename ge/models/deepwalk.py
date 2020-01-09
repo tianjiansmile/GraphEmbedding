@@ -31,6 +31,7 @@ class DeepWalk:
 
         self.walker = RandomWalker(
             graph, p=1, q=1, )
+        # 获得随机游走序列
         self.sentences = self.walker.simulate_walks(
             num_walks=num_walks, walk_length=walk_length, workers=workers, verbose=1)
 
@@ -46,6 +47,7 @@ class DeepWalk:
         kwargs["iter"] = iter
 
         print("Learning embedding vectors...")
+        # 训练词向量
         model = Word2Vec(**kwargs)
         print("Learning embedding vectors done!")
 

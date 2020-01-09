@@ -12,11 +12,13 @@ from sklearn.manifold import TSNE
 
 def evaluate_embeddings(embeddings,comm):
     # X, Y = read_node_label('../data/wiki/wiki_labels.txt')
+    # 获得标签数据
     X, Y = read_node_label('../data/my/'+comm+'_label.txt')
 
     tr_frac = 0.8
     print("Training classifier using {:.2f}% nodes...".format(
         tr_frac * 100))
+    # 选逻辑回归分类器
     clf = Classifier(embeddings=embeddings, clf=LogisticRegression())
     clf.split_train_evaluate(X, Y, tr_frac)
 
@@ -31,6 +33,7 @@ def plot_embeddings(embeddings,comm,page):
         emb_list.append(embeddings[k])
     emb_list = np.array(emb_list)
 
+    # 降维
     model = TSNE(n_components=2)
     node_pos = model.fit_transform(emb_list)
 
@@ -57,9 +60,12 @@ if __name__ == "__main__":
 
     # G = nx.karate_club_graph()
 
+    # walk_length 游走步长， num_walks模拟轮数，workers 线程数
     model = DeepWalk(G, walk_length=20, num_walks=40, workers=1)
     model.train(window_size=5, iter=3)
+    # 返回词向量字典，节点和嵌入向量
     embeddings = model.get_embeddings()
 
-    # evaluate_embeddings(embeddings,comm)
+    # 评估嵌入向量
+    evaluate_embeddings(embeddings,comm)
     plot_embeddings(embeddings,comm,page)
